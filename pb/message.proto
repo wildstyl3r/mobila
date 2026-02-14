@@ -1,0 +1,51 @@
+syntax = "proto3";
+package pb;
+option go_package = "./pb";
+
+message Ping {}
+message Pong {}
+
+message Static {
+  uint32 message_id = 1;
+  string mimeType = 2;
+  bytes data = 3;
+}
+
+message StaticResendRequest {
+  uint32 message_id = 1;
+}
+
+message StreamControl {
+  enum Action {
+    START = 0;
+    STOP = 1;
+    RESUME = 2;
+  }
+  uint64 session_id = 1;
+  string mimeType = 2;
+  Action action = 3;
+  bytes offset = 4;
+  bytes init_metadata = 5;
+  uint32 last_received_seq = 6;
+}
+
+message StreamChunk {
+  uint64 session_id = 1;
+  uint32 seq_number = 2;
+  bytes offset = 3;
+  bytes data = 4;
+}
+message StreamResendRequest {
+  uint32 session_id = 1;
+  uint32 sqe_number = 2;
+}
+
+message DataPacket {
+  oneof msg {
+    Static static = 1;
+    StaticResendRequest resend_static = 2;
+    StreamControl control = 3;
+    StreamChunk chunk = 4;
+    StaticResendRequest resend_stream = 5;
+  }
+}
