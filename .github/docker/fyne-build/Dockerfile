@@ -1,4 +1,4 @@
-FROM fyneio/fyne-cross-images:base-latest
+FROM fyneio/fyne-cross-images:base
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
     libvpx-dev \
