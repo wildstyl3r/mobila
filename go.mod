@@ -1,6 +1,6 @@
 module mobila
 
-go 1.24.12
+go 1.26
 
 require (
 	fyne.io/fyne/v2 v2.7.2
@@ -47,7 +47,7 @@ require (
 	github.com/libp2p/go-libp2p-kbucket v0.8.0 // indirect
 	github.com/libp2p/go-libp2p-record v0.3.1 // indirect
 	github.com/libp2p/go-libp2p-routing-helpers v0.7.5 // indirect
-	github.com/libp2p/go-msgio v0.3.0 // indirect
+	github.com/libp2p/go-msgio v0.3.0
 	github.com/libp2p/go-netroute v0.4.0 // indirect
 	github.com/libp2p/go-reuseport v0.4.0 // indirect
 	github.com/libp2p/go-yamux/v5 v5.0.1 // indirect
@@ -121,6 +121,7 @@ require (
 )
 
 require (
+	github.com/at-wat/ebml-go v0.17.2
 	github.com/libp2p/go-libp2p v0.47.0
 	github.com/pion/mediadevices v0.9.4
 )
@@ -128,7 +129,6 @@ require (
 require (
 	fyne.io/systray v1.12.0 // indirect
 	github.com/BurntSushi/toml v1.5.0 // indirect
-	github.com/at-wat/ebml-go v0.17.2 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/fredbi/uri v1.1.1 // indirect
 	github.com/fsnotify/fsnotify v1.9.0 // indirect
