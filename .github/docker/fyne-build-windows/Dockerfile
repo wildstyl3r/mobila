@@ -1,12 +1,8 @@
-FROM fyneio/fyne-cross-images:latest-windows
+FROM fyneio/fyne-cross-images:windows
 
 USER root
-
-# Устанавливаем инструменты сборки
 RUN apt-get update && apt-get install -y git make perl
-
-# Сборка libvpx под Windows через Zig
-RUN git clone --depth 1 https://chromium.googlesource.com /tmp/libvpx && \
+RUN git clone --depth 1 https://chromium.googlesource.com/webm/libvpx /tmp/libvpx && \
     cd /tmp/libvpx && \
     CC="zig cc -target x86_64-windows-gnu" \
     CXX="zig c++ -target x86_64-windows-gnu" \
@@ -15,7 +11,6 @@ RUN git clone --depth 1 https://chromium.googlesource.com /tmp/libvpx && \
     make -j$(nproc) && make install && \
     rm -rf /tmp/libvpx
 
-# Настройка pkg-config, чтобы pion/mediadevices нашел библиотеку автоматически
 ENV PKG_CONFIG_PATH_x86_64_w64_mingw32=/usr/x86_64-w64-mingw32/lib/pkgconfig
 ENV PKG_CONFIG_ALLOW_CROSS=1
 
