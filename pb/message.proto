@@ -6,46 +6,53 @@ message Ping {}
 message Pong {}
 
 message Static {
-  uint32 message_id = 1;
-  string mimeType = 2;
-  bytes data = 3;
+  string chat_id = 1;
+  string prev_message_id = 2;
+  string message_id = 3;
+  string mimeType = 4;
+  string author_id = 5;
+  bytes data = 6;
 }
 
 message StaticResendRequest {
-  uint32 message_id = 1;
+  string chat_id = 1;
+  string message_id = 2;
 }
 
-message StreamControl {
-  enum Action {
-    START = 0;
+message StreamInfo {
+  enum Status {
+    ACTIVE = 0;
     STOP = 1;
-    RESUME = 2;
   }
-  uint64 session_id = 1;
-  string mimeType = 2;
-  Action action = 3;
-  bytes offset = 4;
-  bytes init_metadata = 5;
-  uint32 last_received_seq = 6;
+  Status status = 1;
+  string chat_id = 2;
+}
+
+message StreamInfoResponse {
+  enum Answer {
+    ENTER = 0;
+    LEAVE = 1;
+  }
+  Answer answer = 1;
+  string chat_id = 2;
 }
 
 message StreamChunk {
-  uint64 session_id = 1;
-  uint32 seq_number = 2;
-  bytes offset = 3;
-  bytes data = 4;
-}
-message StreamResendRequest {
-  uint32 session_id = 1;
-  uint32 sqe_number = 2;
+  bool is_init = 1;
+  string chat_id = 2;
+  uint32 seq_number = 3;
+  bytes offset = 4;
+  bytes data = 5;
 }
 
 message DataPacket {
   oneof msg {
     Static static = 1;
     StaticResendRequest resend_static = 2;
-    StreamControl control = 3;
-    StreamChunk chunk = 4;
-    StaticResendRequest resend_stream = 5;
+    StreamInfo stream_info = 3;
+    StreamInfoResponse stream_info_response = 4;
+    StreamChunk stream_chunk = 5;
+    Ping ping = 6;
+    Pong pong = 7;
   }
 }

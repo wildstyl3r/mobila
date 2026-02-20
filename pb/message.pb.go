@@ -21,53 +21,96 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-type StreamControl_Action int32
+type StreamInfo_Status int32
 
 const (
-	StreamControl_START  StreamControl_Action = 0
-	StreamControl_STOP   StreamControl_Action = 1
-	StreamControl_RESUME StreamControl_Action = 2
+	StreamInfo_ACTIVE StreamInfo_Status = 0
+	StreamInfo_STOP   StreamInfo_Status = 1
 )
 
-// Enum value maps for StreamControl_Action.
+// Enum value maps for StreamInfo_Status.
 var (
-	StreamControl_Action_name = map[int32]string{
-		0: "START",
+	StreamInfo_Status_name = map[int32]string{
+		0: "ACTIVE",
 		1: "STOP",
-		2: "RESUME",
 	}
-	StreamControl_Action_value = map[string]int32{
-		"START":  0,
+	StreamInfo_Status_value = map[string]int32{
+		"ACTIVE": 0,
 		"STOP":   1,
-		"RESUME": 2,
 	}
 )
 
-func (x StreamControl_Action) Enum() *StreamControl_Action {
-	p := new(StreamControl_Action)
+func (x StreamInfo_Status) Enum() *StreamInfo_Status {
+	p := new(StreamInfo_Status)
 	*p = x
 	return p
 }
 
-func (x StreamControl_Action) String() string {
+func (x StreamInfo_Status) String() string {
 	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
 }
 
-func (StreamControl_Action) Descriptor() protoreflect.EnumDescriptor {
+func (StreamInfo_Status) Descriptor() protoreflect.EnumDescriptor {
 	return file_pb_message_proto_enumTypes[0].Descriptor()
 }
 
-func (StreamControl_Action) Type() protoreflect.EnumType {
+func (StreamInfo_Status) Type() protoreflect.EnumType {
 	return &file_pb_message_proto_enumTypes[0]
 }
 
-func (x StreamControl_Action) Number() protoreflect.EnumNumber {
+func (x StreamInfo_Status) Number() protoreflect.EnumNumber {
 	return protoreflect.EnumNumber(x)
 }
 
-// Deprecated: Use StreamControl_Action.Descriptor instead.
-func (StreamControl_Action) EnumDescriptor() ([]byte, []int) {
+// Deprecated: Use StreamInfo_Status.Descriptor instead.
+func (StreamInfo_Status) EnumDescriptor() ([]byte, []int) {
 	return file_pb_message_proto_rawDescGZIP(), []int{4, 0}
+}
+
+type StreamInfoResponse_Answer int32
+
+const (
+	StreamInfoResponse_ENTER StreamInfoResponse_Answer = 0
+	StreamInfoResponse_LEAVE StreamInfoResponse_Answer = 1
+)
+
+// Enum value maps for StreamInfoResponse_Answer.
+var (
+	StreamInfoResponse_Answer_name = map[int32]string{
+		0: "ENTER",
+		1: "LEAVE",
+	}
+	StreamInfoResponse_Answer_value = map[string]int32{
+		"ENTER": 0,
+		"LEAVE": 1,
+	}
+)
+
+func (x StreamInfoResponse_Answer) Enum() *StreamInfoResponse_Answer {
+	p := new(StreamInfoResponse_Answer)
+	*p = x
+	return p
+}
+
+func (x StreamInfoResponse_Answer) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (StreamInfoResponse_Answer) Descriptor() protoreflect.EnumDescriptor {
+	return file_pb_message_proto_enumTypes[1].Descriptor()
+}
+
+func (StreamInfoResponse_Answer) Type() protoreflect.EnumType {
+	return &file_pb_message_proto_enumTypes[1]
+}
+
+func (x StreamInfoResponse_Answer) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use StreamInfoResponse_Answer.Descriptor instead.
+func (StreamInfoResponse_Answer) EnumDescriptor() ([]byte, []int) {
+	return file_pb_message_proto_rawDescGZIP(), []int{5, 0}
 }
 
 type Ping struct {
@@ -144,9 +187,12 @@ func (*Pong) Descriptor() ([]byte, []int) {
 
 type Static struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	MessageId     uint32                 `protobuf:"varint,1,opt,name=message_id,json=messageId,proto3" json:"message_id,omitempty"`
-	MimeType      string                 `protobuf:"bytes,2,opt,name=mimeType,proto3" json:"mimeType,omitempty"`
-	Data          []byte                 `protobuf:"bytes,3,opt,name=data,proto3" json:"data,omitempty"`
+	ChatId        string                 `protobuf:"bytes,1,opt,name=chat_id,json=chatId,proto3" json:"chat_id,omitempty"`
+	PrevMessageId string                 `protobuf:"bytes,2,opt,name=prev_message_id,json=prevMessageId,proto3" json:"prev_message_id,omitempty"`
+	MessageId     string                 `protobuf:"bytes,3,opt,name=message_id,json=messageId,proto3" json:"message_id,omitempty"`
+	MimeType      string                 `protobuf:"bytes,4,opt,name=mimeType,proto3" json:"mimeType,omitempty"`
+	AuthorId      string                 `protobuf:"bytes,5,opt,name=author_id,json=authorId,proto3" json:"author_id,omitempty"`
+	Data          []byte                 `protobuf:"bytes,6,opt,name=data,proto3" json:"data,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -181,16 +227,37 @@ func (*Static) Descriptor() ([]byte, []int) {
 	return file_pb_message_proto_rawDescGZIP(), []int{2}
 }
 
-func (x *Static) GetMessageId() uint32 {
+func (x *Static) GetChatId() string {
+	if x != nil {
+		return x.ChatId
+	}
+	return ""
+}
+
+func (x *Static) GetPrevMessageId() string {
+	if x != nil {
+		return x.PrevMessageId
+	}
+	return ""
+}
+
+func (x *Static) GetMessageId() string {
 	if x != nil {
 		return x.MessageId
 	}
-	return 0
+	return ""
 }
 
 func (x *Static) GetMimeType() string {
 	if x != nil {
 		return x.MimeType
+	}
+	return ""
+}
+
+func (x *Static) GetAuthorId() string {
+	if x != nil {
+		return x.AuthorId
 	}
 	return ""
 }
@@ -204,7 +271,8 @@ func (x *Static) GetData() []byte {
 
 type StaticResendRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	MessageId     uint32                 `protobuf:"varint,1,opt,name=message_id,json=messageId,proto3" json:"message_id,omitempty"`
+	ChatId        string                 `protobuf:"bytes,1,opt,name=chat_id,json=chatId,proto3" json:"chat_id,omitempty"`
+	MessageId     string                 `protobuf:"bytes,2,opt,name=message_id,json=messageId,proto3" json:"message_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -239,39 +307,42 @@ func (*StaticResendRequest) Descriptor() ([]byte, []int) {
 	return file_pb_message_proto_rawDescGZIP(), []int{3}
 }
 
-func (x *StaticResendRequest) GetMessageId() uint32 {
+func (x *StaticResendRequest) GetChatId() string {
+	if x != nil {
+		return x.ChatId
+	}
+	return ""
+}
+
+func (x *StaticResendRequest) GetMessageId() string {
 	if x != nil {
 		return x.MessageId
 	}
-	return 0
+	return ""
 }
 
-type StreamControl struct {
-	state           protoimpl.MessageState `protogen:"open.v1"`
-	SessionId       uint64                 `protobuf:"varint,1,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
-	MimeType        string                 `protobuf:"bytes,2,opt,name=mimeType,proto3" json:"mimeType,omitempty"`
-	Action          StreamControl_Action   `protobuf:"varint,3,opt,name=action,proto3,enum=pb.StreamControl_Action" json:"action,omitempty"`
-	Offset          []byte                 `protobuf:"bytes,4,opt,name=offset,proto3" json:"offset,omitempty"`
-	InitMetadata    []byte                 `protobuf:"bytes,5,opt,name=init_metadata,json=initMetadata,proto3" json:"init_metadata,omitempty"`
-	LastReceivedSeq uint32                 `protobuf:"varint,6,opt,name=last_received_seq,json=lastReceivedSeq,proto3" json:"last_received_seq,omitempty"`
-	unknownFields   protoimpl.UnknownFields
-	sizeCache       protoimpl.SizeCache
+type StreamInfo struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Status        StreamInfo_Status      `protobuf:"varint,1,opt,name=status,proto3,enum=pb.StreamInfo_Status" json:"status,omitempty"`
+	ChatId        string                 `protobuf:"bytes,2,opt,name=chat_id,json=chatId,proto3" json:"chat_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
-func (x *StreamControl) Reset() {
-	*x = StreamControl{}
+func (x *StreamInfo) Reset() {
+	*x = StreamInfo{}
 	mi := &file_pb_message_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *StreamControl) String() string {
+func (x *StreamInfo) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*StreamControl) ProtoMessage() {}
+func (*StreamInfo) ProtoMessage() {}
 
-func (x *StreamControl) ProtoReflect() protoreflect.Message {
+func (x *StreamInfo) ProtoReflect() protoreflect.Message {
 	mi := &file_pb_message_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -283,66 +354,91 @@ func (x *StreamControl) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use StreamControl.ProtoReflect.Descriptor instead.
-func (*StreamControl) Descriptor() ([]byte, []int) {
+// Deprecated: Use StreamInfo.ProtoReflect.Descriptor instead.
+func (*StreamInfo) Descriptor() ([]byte, []int) {
 	return file_pb_message_proto_rawDescGZIP(), []int{4}
 }
 
-func (x *StreamControl) GetSessionId() uint64 {
+func (x *StreamInfo) GetStatus() StreamInfo_Status {
 	if x != nil {
-		return x.SessionId
+		return x.Status
 	}
-	return 0
+	return StreamInfo_ACTIVE
 }
 
-func (x *StreamControl) GetMimeType() string {
+func (x *StreamInfo) GetChatId() string {
 	if x != nil {
-		return x.MimeType
+		return x.ChatId
 	}
 	return ""
 }
 
-func (x *StreamControl) GetAction() StreamControl_Action {
-	if x != nil {
-		return x.Action
-	}
-	return StreamControl_START
+type StreamInfoResponse struct {
+	state         protoimpl.MessageState    `protogen:"open.v1"`
+	Answer        StreamInfoResponse_Answer `protobuf:"varint,1,opt,name=answer,proto3,enum=pb.StreamInfoResponse_Answer" json:"answer,omitempty"`
+	ChatId        string                    `protobuf:"bytes,2,opt,name=chat_id,json=chatId,proto3" json:"chat_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
-func (x *StreamControl) GetOffset() []byte {
-	if x != nil {
-		return x.Offset
-	}
-	return nil
+func (x *StreamInfoResponse) Reset() {
+	*x = StreamInfoResponse{}
+	mi := &file_pb_message_proto_msgTypes[5]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
 }
 
-func (x *StreamControl) GetInitMetadata() []byte {
-	if x != nil {
-		return x.InitMetadata
-	}
-	return nil
+func (x *StreamInfoResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
 }
 
-func (x *StreamControl) GetLastReceivedSeq() uint32 {
+func (*StreamInfoResponse) ProtoMessage() {}
+
+func (x *StreamInfoResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_pb_message_proto_msgTypes[5]
 	if x != nil {
-		return x.LastReceivedSeq
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
 	}
-	return 0
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use StreamInfoResponse.ProtoReflect.Descriptor instead.
+func (*StreamInfoResponse) Descriptor() ([]byte, []int) {
+	return file_pb_message_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *StreamInfoResponse) GetAnswer() StreamInfoResponse_Answer {
+	if x != nil {
+		return x.Answer
+	}
+	return StreamInfoResponse_ENTER
+}
+
+func (x *StreamInfoResponse) GetChatId() string {
+	if x != nil {
+		return x.ChatId
+	}
+	return ""
 }
 
 type StreamChunk struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	SessionId     uint64                 `protobuf:"varint,1,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
-	SeqNumber     uint32                 `protobuf:"varint,2,opt,name=seq_number,json=seqNumber,proto3" json:"seq_number,omitempty"`
-	Offset        []byte                 `protobuf:"bytes,3,opt,name=offset,proto3" json:"offset,omitempty"`
-	Data          []byte                 `protobuf:"bytes,4,opt,name=data,proto3" json:"data,omitempty"`
+	IsInit        bool                   `protobuf:"varint,1,opt,name=is_init,json=isInit,proto3" json:"is_init,omitempty"`
+	ChatId        string                 `protobuf:"bytes,2,opt,name=chat_id,json=chatId,proto3" json:"chat_id,omitempty"`
+	SeqNumber     uint32                 `protobuf:"varint,3,opt,name=seq_number,json=seqNumber,proto3" json:"seq_number,omitempty"`
+	Offset        []byte                 `protobuf:"bytes,4,opt,name=offset,proto3" json:"offset,omitempty"`
+	Data          []byte                 `protobuf:"bytes,5,opt,name=data,proto3" json:"data,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *StreamChunk) Reset() {
 	*x = StreamChunk{}
-	mi := &file_pb_message_proto_msgTypes[5]
+	mi := &file_pb_message_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -354,7 +450,7 @@ func (x *StreamChunk) String() string {
 func (*StreamChunk) ProtoMessage() {}
 
 func (x *StreamChunk) ProtoReflect() protoreflect.Message {
-	mi := &file_pb_message_proto_msgTypes[5]
+	mi := &file_pb_message_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -367,14 +463,21 @@ func (x *StreamChunk) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use StreamChunk.ProtoReflect.Descriptor instead.
 func (*StreamChunk) Descriptor() ([]byte, []int) {
-	return file_pb_message_proto_rawDescGZIP(), []int{5}
+	return file_pb_message_proto_rawDescGZIP(), []int{6}
 }
 
-func (x *StreamChunk) GetSessionId() uint64 {
+func (x *StreamChunk) GetIsInit() bool {
 	if x != nil {
-		return x.SessionId
+		return x.IsInit
 	}
-	return 0
+	return false
+}
+
+func (x *StreamChunk) GetChatId() string {
+	if x != nil {
+		return x.ChatId
+	}
+	return ""
 }
 
 func (x *StreamChunk) GetSeqNumber() uint32 {
@@ -398,67 +501,17 @@ func (x *StreamChunk) GetData() []byte {
 	return nil
 }
 
-type StreamResendRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	SessionId     uint32                 `protobuf:"varint,1,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
-	SqeNumber     uint32                 `protobuf:"varint,2,opt,name=sqe_number,json=sqeNumber,proto3" json:"sqe_number,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *StreamResendRequest) Reset() {
-	*x = StreamResendRequest{}
-	mi := &file_pb_message_proto_msgTypes[6]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *StreamResendRequest) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*StreamResendRequest) ProtoMessage() {}
-
-func (x *StreamResendRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pb_message_proto_msgTypes[6]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use StreamResendRequest.ProtoReflect.Descriptor instead.
-func (*StreamResendRequest) Descriptor() ([]byte, []int) {
-	return file_pb_message_proto_rawDescGZIP(), []int{6}
-}
-
-func (x *StreamResendRequest) GetSessionId() uint32 {
-	if x != nil {
-		return x.SessionId
-	}
-	return 0
-}
-
-func (x *StreamResendRequest) GetSqeNumber() uint32 {
-	if x != nil {
-		return x.SqeNumber
-	}
-	return 0
-}
-
 type DataPacket struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// Types that are valid to be assigned to Msg:
 	//
 	//	*DataPacket_Static
 	//	*DataPacket_ResendStatic
-	//	*DataPacket_Control
-	//	*DataPacket_Chunk
-	//	*DataPacket_ResendStream
+	//	*DataPacket_StreamInfo
+	//	*DataPacket_StreamInfoResponse
+	//	*DataPacket_StreamChunk
+	//	*DataPacket_Ping
+	//	*DataPacket_Pong
 	Msg           isDataPacket_Msg `protobuf_oneof:"msg"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -519,28 +572,46 @@ func (x *DataPacket) GetResendStatic() *StaticResendRequest {
 	return nil
 }
 
-func (x *DataPacket) GetControl() *StreamControl {
+func (x *DataPacket) GetStreamInfo() *StreamInfo {
 	if x != nil {
-		if x, ok := x.Msg.(*DataPacket_Control); ok {
-			return x.Control
+		if x, ok := x.Msg.(*DataPacket_StreamInfo); ok {
+			return x.StreamInfo
 		}
 	}
 	return nil
 }
 
-func (x *DataPacket) GetChunk() *StreamChunk {
+func (x *DataPacket) GetStreamInfoResponse() *StreamInfoResponse {
 	if x != nil {
-		if x, ok := x.Msg.(*DataPacket_Chunk); ok {
-			return x.Chunk
+		if x, ok := x.Msg.(*DataPacket_StreamInfoResponse); ok {
+			return x.StreamInfoResponse
 		}
 	}
 	return nil
 }
 
-func (x *DataPacket) GetResendStream() *StaticResendRequest {
+func (x *DataPacket) GetStreamChunk() *StreamChunk {
 	if x != nil {
-		if x, ok := x.Msg.(*DataPacket_ResendStream); ok {
-			return x.ResendStream
+		if x, ok := x.Msg.(*DataPacket_StreamChunk); ok {
+			return x.StreamChunk
+		}
+	}
+	return nil
+}
+
+func (x *DataPacket) GetPing() *Ping {
+	if x != nil {
+		if x, ok := x.Msg.(*DataPacket_Ping); ok {
+			return x.Ping
+		}
+	}
+	return nil
+}
+
+func (x *DataPacket) GetPong() *Pong {
+	if x != nil {
+		if x, ok := x.Msg.(*DataPacket_Pong); ok {
+			return x.Pong
 		}
 	}
 	return nil
@@ -558,27 +629,39 @@ type DataPacket_ResendStatic struct {
 	ResendStatic *StaticResendRequest `protobuf:"bytes,2,opt,name=resend_static,json=resendStatic,proto3,oneof"`
 }
 
-type DataPacket_Control struct {
-	Control *StreamControl `protobuf:"bytes,3,opt,name=control,proto3,oneof"`
+type DataPacket_StreamInfo struct {
+	StreamInfo *StreamInfo `protobuf:"bytes,3,opt,name=stream_info,json=streamInfo,proto3,oneof"`
 }
 
-type DataPacket_Chunk struct {
-	Chunk *StreamChunk `protobuf:"bytes,4,opt,name=chunk,proto3,oneof"`
+type DataPacket_StreamInfoResponse struct {
+	StreamInfoResponse *StreamInfoResponse `protobuf:"bytes,4,opt,name=stream_info_response,json=streamInfoResponse,proto3,oneof"`
 }
 
-type DataPacket_ResendStream struct {
-	ResendStream *StaticResendRequest `protobuf:"bytes,5,opt,name=resend_stream,json=resendStream,proto3,oneof"`
+type DataPacket_StreamChunk struct {
+	StreamChunk *StreamChunk `protobuf:"bytes,5,opt,name=stream_chunk,json=streamChunk,proto3,oneof"`
+}
+
+type DataPacket_Ping struct {
+	Ping *Ping `protobuf:"bytes,6,opt,name=ping,proto3,oneof"`
+}
+
+type DataPacket_Pong struct {
+	Pong *Pong `protobuf:"bytes,7,opt,name=pong,proto3,oneof"`
 }
 
 func (*DataPacket_Static) isDataPacket_Msg() {}
 
 func (*DataPacket_ResendStatic) isDataPacket_Msg() {}
 
-func (*DataPacket_Control) isDataPacket_Msg() {}
+func (*DataPacket_StreamInfo) isDataPacket_Msg() {}
 
-func (*DataPacket_Chunk) isDataPacket_Msg() {}
+func (*DataPacket_StreamInfoResponse) isDataPacket_Msg() {}
 
-func (*DataPacket_ResendStream) isDataPacket_Msg() {}
+func (*DataPacket_StreamChunk) isDataPacket_Msg() {}
+
+func (*DataPacket_Ping) isDataPacket_Msg() {}
+
+func (*DataPacket_Pong) isDataPacket_Msg() {}
 
 var File_pb_message_proto protoreflect.FileDescriptor
 
@@ -586,48 +669,51 @@ const file_pb_message_proto_rawDesc = "" +
 	"\n" +
 	"\x10pb/message.proto\x12\x02pb\"\x06\n" +
 	"\x04Ping\"\x06\n" +
-	"\x04Pong\"W\n" +
-	"\x06Static\x12\x1d\n" +
+	"\x04Pong\"\xb5\x01\n" +
+	"\x06Static\x12\x17\n" +
+	"\achat_id\x18\x01 \x01(\tR\x06chatId\x12&\n" +
+	"\x0fprev_message_id\x18\x02 \x01(\tR\rprevMessageId\x12\x1d\n" +
 	"\n" +
-	"message_id\x18\x01 \x01(\rR\tmessageId\x12\x1a\n" +
-	"\bmimeType\x18\x02 \x01(\tR\bmimeType\x12\x12\n" +
-	"\x04data\x18\x03 \x01(\fR\x04data\"4\n" +
-	"\x13StaticResendRequest\x12\x1d\n" +
+	"message_id\x18\x03 \x01(\tR\tmessageId\x12\x1a\n" +
+	"\bmimeType\x18\x04 \x01(\tR\bmimeType\x12\x1b\n" +
+	"\tauthor_id\x18\x05 \x01(\tR\bauthorId\x12\x12\n" +
+	"\x04data\x18\x06 \x01(\fR\x04data\"M\n" +
+	"\x13StaticResendRequest\x12\x17\n" +
+	"\achat_id\x18\x01 \x01(\tR\x06chatId\x12\x1d\n" +
 	"\n" +
-	"message_id\x18\x01 \x01(\rR\tmessageId\"\x90\x02\n" +
-	"\rStreamControl\x12\x1d\n" +
+	"message_id\x18\x02 \x01(\tR\tmessageId\"t\n" +
 	"\n" +
-	"session_id\x18\x01 \x01(\x04R\tsessionId\x12\x1a\n" +
-	"\bmimeType\x18\x02 \x01(\tR\bmimeType\x120\n" +
-	"\x06action\x18\x03 \x01(\x0e2\x18.pb.StreamControl.ActionR\x06action\x12\x16\n" +
-	"\x06offset\x18\x04 \x01(\fR\x06offset\x12#\n" +
-	"\rinit_metadata\x18\x05 \x01(\fR\finitMetadata\x12*\n" +
-	"\x11last_received_seq\x18\x06 \x01(\rR\x0flastReceivedSeq\")\n" +
-	"\x06Action\x12\t\n" +
-	"\x05START\x10\x00\x12\b\n" +
-	"\x04STOP\x10\x01\x12\n" +
+	"StreamInfo\x12-\n" +
+	"\x06status\x18\x01 \x01(\x0e2\x15.pb.StreamInfo.StatusR\x06status\x12\x17\n" +
+	"\achat_id\x18\x02 \x01(\tR\x06chatId\"\x1e\n" +
+	"\x06Status\x12\n" +
 	"\n" +
-	"\x06RESUME\x10\x02\"w\n" +
-	"\vStreamChunk\x12\x1d\n" +
+	"\x06ACTIVE\x10\x00\x12\b\n" +
+	"\x04STOP\x10\x01\"\x84\x01\n" +
+	"\x12StreamInfoResponse\x125\n" +
+	"\x06answer\x18\x01 \x01(\x0e2\x1d.pb.StreamInfoResponse.AnswerR\x06answer\x12\x17\n" +
+	"\achat_id\x18\x02 \x01(\tR\x06chatId\"\x1e\n" +
+	"\x06Answer\x12\t\n" +
+	"\x05ENTER\x10\x00\x12\t\n" +
+	"\x05LEAVE\x10\x01\"\x8a\x01\n" +
+	"\vStreamChunk\x12\x17\n" +
+	"\ais_init\x18\x01 \x01(\bR\x06isInit\x12\x17\n" +
+	"\achat_id\x18\x02 \x01(\tR\x06chatId\x12\x1d\n" +
 	"\n" +
-	"session_id\x18\x01 \x01(\x04R\tsessionId\x12\x1d\n" +
-	"\n" +
-	"seq_number\x18\x02 \x01(\rR\tseqNumber\x12\x16\n" +
-	"\x06offset\x18\x03 \x01(\fR\x06offset\x12\x12\n" +
-	"\x04data\x18\x04 \x01(\fR\x04data\"S\n" +
-	"\x13StreamResendRequest\x12\x1d\n" +
-	"\n" +
-	"session_id\x18\x01 \x01(\rR\tsessionId\x12\x1d\n" +
-	"\n" +
-	"sqe_number\x18\x02 \x01(\rR\tsqeNumber\"\x91\x02\n" +
+	"seq_number\x18\x03 \x01(\rR\tseqNumber\x12\x16\n" +
+	"\x06offset\x18\x04 \x01(\fR\x06offset\x12\x12\n" +
+	"\x04data\x18\x05 \x01(\fR\x04data\"\xee\x02\n" +
 	"\n" +
 	"DataPacket\x12$\n" +
 	"\x06static\x18\x01 \x01(\v2\n" +
 	".pb.StaticH\x00R\x06static\x12>\n" +
-	"\rresend_static\x18\x02 \x01(\v2\x17.pb.StaticResendRequestH\x00R\fresendStatic\x12-\n" +
-	"\acontrol\x18\x03 \x01(\v2\x11.pb.StreamControlH\x00R\acontrol\x12'\n" +
-	"\x05chunk\x18\x04 \x01(\v2\x0f.pb.StreamChunkH\x00R\x05chunk\x12>\n" +
-	"\rresend_stream\x18\x05 \x01(\v2\x17.pb.StaticResendRequestH\x00R\fresendStreamB\x05\n" +
+	"\rresend_static\x18\x02 \x01(\v2\x17.pb.StaticResendRequestH\x00R\fresendStatic\x121\n" +
+	"\vstream_info\x18\x03 \x01(\v2\x0e.pb.StreamInfoH\x00R\n" +
+	"streamInfo\x12J\n" +
+	"\x14stream_info_response\x18\x04 \x01(\v2\x16.pb.StreamInfoResponseH\x00R\x12streamInfoResponse\x124\n" +
+	"\fstream_chunk\x18\x05 \x01(\v2\x0f.pb.StreamChunkH\x00R\vstreamChunk\x12\x1e\n" +
+	"\x04ping\x18\x06 \x01(\v2\b.pb.PingH\x00R\x04ping\x12\x1e\n" +
+	"\x04pong\x18\a \x01(\v2\b.pb.PongH\x00R\x04pongB\x05\n" +
 	"\x03msgB\x06Z\x04./pbb\x06proto3"
 
 var (
@@ -642,31 +728,35 @@ func file_pb_message_proto_rawDescGZIP() []byte {
 	return file_pb_message_proto_rawDescData
 }
 
-var file_pb_message_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
+var file_pb_message_proto_enumTypes = make([]protoimpl.EnumInfo, 2)
 var file_pb_message_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
 var file_pb_message_proto_goTypes = []any{
-	(StreamControl_Action)(0),   // 0: pb.StreamControl.Action
-	(*Ping)(nil),                // 1: pb.Ping
-	(*Pong)(nil),                // 2: pb.Pong
-	(*Static)(nil),              // 3: pb.Static
-	(*StaticResendRequest)(nil), // 4: pb.StaticResendRequest
-	(*StreamControl)(nil),       // 5: pb.StreamControl
-	(*StreamChunk)(nil),         // 6: pb.StreamChunk
-	(*StreamResendRequest)(nil), // 7: pb.StreamResendRequest
-	(*DataPacket)(nil),          // 8: pb.DataPacket
+	(StreamInfo_Status)(0),         // 0: pb.StreamInfo.Status
+	(StreamInfoResponse_Answer)(0), // 1: pb.StreamInfoResponse.Answer
+	(*Ping)(nil),                   // 2: pb.Ping
+	(*Pong)(nil),                   // 3: pb.Pong
+	(*Static)(nil),                 // 4: pb.Static
+	(*StaticResendRequest)(nil),    // 5: pb.StaticResendRequest
+	(*StreamInfo)(nil),             // 6: pb.StreamInfo
+	(*StreamInfoResponse)(nil),     // 7: pb.StreamInfoResponse
+	(*StreamChunk)(nil),            // 8: pb.StreamChunk
+	(*DataPacket)(nil),             // 9: pb.DataPacket
 }
 var file_pb_message_proto_depIdxs = []int32{
-	0, // 0: pb.StreamControl.action:type_name -> pb.StreamControl.Action
-	3, // 1: pb.DataPacket.static:type_name -> pb.Static
-	4, // 2: pb.DataPacket.resend_static:type_name -> pb.StaticResendRequest
-	5, // 3: pb.DataPacket.control:type_name -> pb.StreamControl
-	6, // 4: pb.DataPacket.chunk:type_name -> pb.StreamChunk
-	4, // 5: pb.DataPacket.resend_stream:type_name -> pb.StaticResendRequest
-	6, // [6:6] is the sub-list for method output_type
-	6, // [6:6] is the sub-list for method input_type
-	6, // [6:6] is the sub-list for extension type_name
-	6, // [6:6] is the sub-list for extension extendee
-	0, // [0:6] is the sub-list for field type_name
+	0, // 0: pb.StreamInfo.status:type_name -> pb.StreamInfo.Status
+	1, // 1: pb.StreamInfoResponse.answer:type_name -> pb.StreamInfoResponse.Answer
+	4, // 2: pb.DataPacket.static:type_name -> pb.Static
+	5, // 3: pb.DataPacket.resend_static:type_name -> pb.StaticResendRequest
+	6, // 4: pb.DataPacket.stream_info:type_name -> pb.StreamInfo
+	7, // 5: pb.DataPacket.stream_info_response:type_name -> pb.StreamInfoResponse
+	8, // 6: pb.DataPacket.stream_chunk:type_name -> pb.StreamChunk
+	2, // 7: pb.DataPacket.ping:type_name -> pb.Ping
+	3, // 8: pb.DataPacket.pong:type_name -> pb.Pong
+	9, // [9:9] is the sub-list for method output_type
+	9, // [9:9] is the sub-list for method input_type
+	9, // [9:9] is the sub-list for extension type_name
+	9, // [9:9] is the sub-list for extension extendee
+	0, // [0:9] is the sub-list for field type_name
 }
 
 func init() { file_pb_message_proto_init() }
@@ -677,16 +767,18 @@ func file_pb_message_proto_init() {
 	file_pb_message_proto_msgTypes[7].OneofWrappers = []any{
 		(*DataPacket_Static)(nil),
 		(*DataPacket_ResendStatic)(nil),
-		(*DataPacket_Control)(nil),
-		(*DataPacket_Chunk)(nil),
-		(*DataPacket_ResendStream)(nil),
+		(*DataPacket_StreamInfo)(nil),
+		(*DataPacket_StreamInfoResponse)(nil),
+		(*DataPacket_StreamChunk)(nil),
+		(*DataPacket_Ping)(nil),
+		(*DataPacket_Pong)(nil),
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_pb_message_proto_rawDesc), len(file_pb_message_proto_rawDesc)),
-			NumEnums:      1,
+			NumEnums:      2,
 			NumMessages:   8,
 			NumExtensions: 0,
 			NumServices:   0,

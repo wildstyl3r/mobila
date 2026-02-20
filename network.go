@@ -12,6 +12,7 @@ import (
 	"github.com/libp2p/go-libp2p/core/crypto"
 	"github.com/libp2p/go-libp2p/core/host"
 	"github.com/libp2p/go-libp2p/core/peer"
+	libp2pwebrtc "github.com/libp2p/go-libp2p/p2p/transport/webrtc"
 )
 
 type Libp2pNode struct {
@@ -37,7 +38,13 @@ func StartNode(ctx context.Context, store *Store) (*Libp2pNode, error) {
 		return nil, fmt.Errorf("error (wrong password?): %w", err)
 	}
 
-	h, _ := libp2p.New(libp2p.Identity(privKey))
+	h, _ := libp2p.New(
+		libp2p.Identity(privKey),
+		libp2p.Transport(libp2pwebrtc.New),
+		libp2p.ListenAddrStrings("/ip4/0.0.0.0/udp/0/webrtc-direct", "/ip4/0.0.0.0/tcp/0"),
+		libp2p.NATPortMap(),
+		libp2p.EnableRelay(),
+		libp2p.EnableHolePunching())
 	idht, _ := dht.New(ctx, h)
 
 	node := &Libp2pNode{Host: h, DHT: idht, Store: store}
