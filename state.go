@@ -108,6 +108,12 @@ func (s *State) ReloadContactsAndChats() (err error) {
 				fmt.Printf("error trying to decode peer.ID from string %s\n", peerID)
 				return
 			}
+			for {
+				if s.Node.DHT.RoutingTable().Size() > 0 {
+					break
+				}
+				time.Sleep(1 * time.Second) // Короткая пауза, чтобы не нагружать CPU
+			}
 			ctx, cancel := context.WithTimeout(context.Background(), 1*time.Minute)
 			defer cancel()
 			peerInfo, err := s.Node.DHT.FindPeer(ctx, peerID)
