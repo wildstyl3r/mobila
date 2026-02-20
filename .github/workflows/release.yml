@@ -16,16 +16,19 @@ jobs:
         with:
           go-version: '1.24'
 
-      - name: Build custom fyne-cross image
-        run: docker build -t custom-fyne-build .github/docker/fyne-build/
+      - name: Build custom fyne-cross image for linux
+        run: docker build -t custom-fyne-linux .github/docker/fyne-build-linux/
+
+      - name: Build custom fyne-cross image for windows
+        run: docker build -t custom-fyne-windows .github/docker/fyne-build-windows/
 
       - name: Install fyne-cross
         run: go install github.com/fyne-io/fyne-cross@latest
 
       - name: Build for Linux and Windows
         run: |
-          fyne-cross linux -arch=amd64 --image custom-fyne-build --env CGO_ENABLED=1
-          fyne-cross windows -arch=amd64 --image custom-fyne-build --env CGO_ENABLED=1
+          fyne-cross linux -arch=amd64 --image custom-fyne-linux --env CGO_ENABLED=1
+          fyne-cross windows -arch=amd64 --image custom-fyne-windows --env CGO_ENABLED=1
 
       - name: Archive artifacts
         run: |
